@@ -367,55 +367,45 @@ export const getPostByID = async (
 };
 
 
-
-
-// Define an asynchronous function to handle incrementing the like count for a post
-export const incrementLike = async (
-  req: Request,  // Type for the request object
-  res: Response  // Type for the response object
-): Promise<void> => {
-  const postID = req.params.id; // Extract the post ID from the request parameters
-  const { userId } = req.body;  // Extract the user ID from the request body
+export const incrementLike = async (req: Request, res: Response): Promise<void> => {
+  const postID = req.params.id;
+  const { userId } = req.body;
 
   try {
-    // Query to check if the user has already liked the post
+    // Vérifier si l'utilisateur a déjà liké ce post
     const checkLike = await pool.query(
-      "SELECT * FROM postslikes WHERE post_id = $1 AND user_id = $2", // SQL query to check for existing like
-      [postID, userId] // Parameters for the query
+      "SELECT 1 FROM postslikes WHERE post_id = $1 AND user_id = $2",
+      [postID, userId]
     );
 
-    // If the user has already liked the post, respond with a 400 (Bad Request) status
     if (checkLike.rows.length > 0) {
-      res.status(400).json({ message: "User has already liked this post" });
-      return; // Exit the function to prevent further execution
+      return res.status(400).json({ message: "Vous avez déjà aimé ce post." });
     }
-    // Query to add a like to the postslikes table
+
+    // Ajouter un like
     await pool.query(
-      "INSERT INTO postslikes (post_id, user_id) VALUES ($1, $2)", // SQL query to insert a new like
-      [postID, userId] // Parameters for the query
+      "INSERT INTO postslikes (post_id, user_id) VALUES ($1, $2)",
+      [postID, userId]
     );
-    // Query to update the like count in the posts table
+
+    // Incrémenter le compteur de likes
     const result = await pool.query(
-      "UPDATE post SET likes = likes + 1 WHERE id = $1 RETURNING likes", // SQL query to increment the like count
-      [postID] // Parameter for the query
+      "UPDATE post SET likes = likes + 1 WHERE id = $1 RETURNING likes",
+      [postID]
     );
-    // Check if the post was found and updated
+
     if (result.rows.length === 0) {
-      // Respond with a 404 (Not Found) status if the post is not found
-      res.status(404).json({ message: "Post not found" });
-    } else {
-      // Extract the updated like count and respond with a 200 (OK) status
-      const updatedLikes = result.rows[0].likes;
-      res.status(200).json({ likes: updatedLikes });
+      return res.status(404).json({ message: "Post non trouvé." });
     }
+
+    return res.status(200).json({ likes: result.rows[0].likes });
   } catch (error) {
-    // Log any errors that occur during query execution or response handling
-    console.error("Error updating like count:", error);
-    // Respond with a server error status and message
-    res.status(500).json({
-      message:
-        "An internal server error occurred while updating the like count.",
+    console.error("Erreur lors du like :", error);
+    return res.status(500).json({
+      message: "Erreur interne lors du traitement du like.",
     });
   }
 };
+
+
 
