@@ -366,10 +366,13 @@ export const getPostByID = async (
   }
 };
 
-
 export const incrementLike = async (req: Request, res: Response): Promise<void> => {
   const postID = req.params.id;
   const { userId } = req.body;
+
+  if (!postID || !userId) {
+    return res.status(400).json({ message: "postID ou userId manquant." });
+  }
 
   try {
     // Vérifier si l'utilisateur a déjà liké ce post
@@ -390,7 +393,7 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
 
     // Incrémenter le compteur de likes
     const result = await pool.query(
-      "UPDATE post SET likes = likes + 1 WHERE id = $1 RETURNING likes",
+      "UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING likes",
       [postID]
     );
 
@@ -406,6 +409,7 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
     });
   }
 };
+
 
 
 
