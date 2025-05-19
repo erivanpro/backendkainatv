@@ -449,7 +449,7 @@ export const incrementLikedeux = async (req: Request, res: Response): Promise<vo
 
     // Incrémenter le compteur de likes
     const result = await pool.query(
-      "UPDATE post SET deslikes = deslikes + 1 WHERE id = $1 RETURNING deslikes",
+      "UPDATE posts SET deslikes = deslikes + 1 WHERE id = $1 RETURNING deslikes",
       [postID]
     );
 
