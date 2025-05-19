@@ -415,7 +415,12 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
 
 
 
-export const incrementLikeDeux = async (req: Request, res: Response): Promise<void> => {
+
+
+
+
+
+export const  incrementLikeDeux = async (req: Request, res: Response): Promise<void> => {
   const postID = req.params.id;
   const { userId } = req.body;
 
@@ -426,7 +431,7 @@ export const incrementLikeDeux = async (req: Request, res: Response): Promise<vo
   try {
     // Vérifier si l'utilisateur a déjà liké ce post
     const checkLike = await pool.query(
-      "SELECT 1 FROM postslikes WHERE post_id = $1 AND user_id = $2",
+      "SELECT 1 FROM postsdeslikes WHERE post_id = $1 AND user_id = $2",
       [postID, userId]
     );
 
@@ -436,13 +441,13 @@ export const incrementLikeDeux = async (req: Request, res: Response): Promise<vo
 
     // Ajouter un like
     await pool.query(
-      "INSERT INTO postslikes (post_id, user_id) VALUES ($1, $2)",
+      "INSERT INTO postsdeslikes (post_id, user_id) VALUES ($1, $2)",
       [postID, userId]
     );
 
     // Incrémenter le compteur de likes
     const result = await pool.query(
-      "UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING likes",
+      "UPDATE posts SET deslikes = deslikes + 1 WHERE id = $1 RETURNING deslikes",
       [postID]
     );
 
@@ -450,21 +455,14 @@ export const incrementLikeDeux = async (req: Request, res: Response): Promise<vo
       return res.status(404).json({ message: "Post non trouvé." });
     }
 
-    return res.status(200).json({ likes: result.rows[0].likes });
+    return res.status(200).json({ deslikes: result.rows[0].deslikes });
   } catch (error) {
-    console.error("Erreur lors du like :", error);
+    console.error("Erreur lors du deslike :", error);
     return res.status(500).json({
       message: "Erreur interne lors du traitement du like.",
     });
   }
 };
-
-
-
-
-
-
-
 
 
 
