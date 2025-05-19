@@ -369,11 +369,9 @@ export const getPostByID = async (
 export const incrementLike = async (req: Request, res: Response): Promise<void> => {
   const postID = req.params.id;
   const { userId } = req.body;
-
   if (!postID || !userId) {
      res.status(400).json({ message: "postID ou userId manquant." });
   }
-
   try {
     // Vérifier si l'utilisateur a déjà liké ce post
     const checkLike = await pool.query(
@@ -393,14 +391,12 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
 
     // Incrémenter le compteur de likes
     const result = await pool.query(
-      "UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING likes",
+      "UPDATE post SET likes = likes + 1 WHERE id = $1 RETURNING likes",
       [postID]
     );
-
     if (result.rows.length === 0) {
       res.status(404).json({ message: "Post non trouvé." });
     }
-
     res.status(200).json({ likes: result.rows[0].likes });
   } catch (error) {
     console.error("Erreur lors du like :", error);
@@ -449,7 +445,7 @@ export const incrementLikedeux = async (req: Request, res: Response): Promise<vo
 
     // Incrémenter le compteur de likes
     const result = await pool.query(
-      "UPDATE posts SET deslikes = deslikes + 1 WHERE id = $1 RETURNING deslikes",
+      "UPDATE post SET deslikes = deslikes + 1 WHERE id = $1 RETURNING deslikes",
       [postID]
     );
 
