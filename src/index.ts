@@ -21,8 +21,6 @@ app.use("/post", postRouter);
 app.get("/post/:id", getPostByID);
 app.get("/live", liveRouter);
 app.use("/library", libraryRouter); // Ensure the prefix is '/library'
-
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

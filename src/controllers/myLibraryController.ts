@@ -1,16 +1,5 @@
 import { Request, Response } from "express"; // Importing types for Request and Response from Express
 const pool = require("../db"); // Importing the database connection pool
-
-
-
-
-
-
-
-
-
-
-
 export const addToLibrary = async (req: Request, res: Response): Promise<void> => {
   const { postId, userId } = req.body; // Extracting postId and userId from the request body
   try {
@@ -30,28 +19,6 @@ export const addToLibrary = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ message: "An internal server error occurred while adding the post to the library." });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const fetchPostbyUserId = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
@@ -81,24 +48,6 @@ export const fetchPostbyUserId = async (req: Request, res: Response): Promise<vo
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const deleteFromLibrary = async (req: Request, res: Response): Promise<void> => {
   const { userId, postId } = req.params; // Extracting userId and postId from the request parameters
   try {
@@ -107,13 +56,11 @@ export const deleteFromLibrary = async (req: Request, res: Response): Promise<vo
       'DELETE FROM mylibrary WHERE user_id = $1 AND post_id = $2', // SQL query
       [userId, postId] // Values for the query placeholders
     );
-
     // Check if any rows were affected (i.e., if the post was found and deleted)
     if (result.rowCount === 0) {
       res.status(404).json({ message: "Post not found in library" }); // Respond with 404 if no rows were deleted
       return; // Ensure no further code is executed
     }
-
     // Respond with a success message
     res.status(200).json({ message: "Post removed from library" });
   } catch (error) {

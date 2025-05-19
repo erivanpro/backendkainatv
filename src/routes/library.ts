@@ -5,5 +5,4 @@ const { addToLibrary, fetchPostbyUserId, deleteFromLibrary } = require('../contr
 router.post('/add', addToLibrary);
 router.get('/:userId', fetchPostbyUserId);
 router.delete('/delete/:userId/:postId', deleteFromLibrary);
-
 module.exports = router;
