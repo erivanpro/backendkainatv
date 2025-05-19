@@ -413,3 +413,65 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
 
 
 
+
+
+export const incrementLikeDeux = async (req: Request, res: Response): Promise<void> => {
+  const postID = req.params.id;
+  const { userId } = req.body;
+
+  if (!postID || !userId) {
+    return res.status(400).json({ message: "postID ou userId manquant." });
+  }
+
+  try {
+    // Vérifier si l'utilisateur a déjà liké ce post
+    const checkLike = await pool.query(
+      "SELECT 1 FROM postslikes WHERE post_id = $1 AND user_id = $2",
+      [postID, userId]
+    );
+
+    if (checkLike.rows.length > 0) {
+      return res.status(400).json({ message: "Vous avez déjà aimé ce post." });
+    }
+
+    // Ajouter un like
+    await pool.query(
+      "INSERT INTO postslikes (post_id, user_id) VALUES ($1, $2)",
+      [postID, userId]
+    );
+
+    // Incrémenter le compteur de likes
+    const result = await pool.query(
+      "UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING likes",
+      [postID]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Post non trouvé." });
+    }
+
+    return res.status(200).json({ likes: result.rows[0].likes });
+  } catch (error) {
+    console.error("Erreur lors du like :", error);
+    return res.status(500).json({
+      message: "Erreur interne lors du traitement du like.",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
