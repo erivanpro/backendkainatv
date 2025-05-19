@@ -371,11 +371,7 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
   const { userId } = req.body;
 
   if (!postID || !userId) {
-<<<<<<< HEAD
      res.status(400).json({ message: "postID ou userId manquant." });
-=======
-    return res.status(400).json({ message: "postID ou userId manquant." });
->>>>>>> ca90994a0915b49467dbef15190a25b2e21a1f1d
   }
 
   try {
@@ -386,11 +382,7 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
     );
 
     if (checkLike.rows.length > 0) {
-<<<<<<< HEAD
       res.status(400).json({ message: "Vous avez déjà aimé ce post." });
-=======
-      return res.status(400).json({ message: "Vous avez déjà aimé ce post." });
->>>>>>> ca90994a0915b49467dbef15190a25b2e21a1f1d
     }
 
     // Ajouter un like
@@ -406,7 +398,6 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
     );
 
     if (result.rows.length === 0) {
-<<<<<<< HEAD
       res.status(404).json({ message: "Post non trouvé." });
     }
 
@@ -414,15 +405,6 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
   } catch (error) {
     console.error("Erreur lors du like :", error);
     res.status(500).json({
-=======
-      return res.status(404).json({ message: "Post non trouvé." });
-    }
-
-    return res.status(200).json({ likes: result.rows[0].likes });
-  } catch (error) {
-    console.error("Erreur lors du like :", error);
-    return res.status(500).json({
->>>>>>> ca90994a0915b49467dbef15190a25b2e21a1f1d
       message: "Erreur interne lors du traitement du like.",
     });
   }
@@ -443,11 +425,7 @@ export const  incrementLikeDeux = async (req: Request, res: Response): Promise<v
   const { userId } = req.body;
 
   if (!postID || !userId) {
-<<<<<<< HEAD
      res.status(400).json({ message: "postID ou userId manquant." });
-=======
-    return res.status(400).json({ message: "postID ou userId manquant." });
->>>>>>> ca90994a0915b49467dbef15190a25b2e21a1f1d
   }
 
   try {
@@ -458,11 +436,7 @@ export const  incrementLikeDeux = async (req: Request, res: Response): Promise<v
     );
 
     if (checkLike.rows.length > 0) {
-<<<<<<< HEAD
        res.status(400).json({ message: "Vous avez déjà aimé ce post." });
-=======
-      return res.status(400).json({ message: "Vous avez déjà aimé ce post." });
->>>>>>> ca90994a0915b49467dbef15190a25b2e21a1f1d
     }
 
     // Ajouter un like
@@ -478,7 +452,6 @@ export const  incrementLikeDeux = async (req: Request, res: Response): Promise<v
     );
 
     if (result.rows.length === 0) {
-<<<<<<< HEAD
      res.status(404).json({ message: "Post non trouvé." });
     }
 
@@ -486,19 +459,17 @@ export const  incrementLikeDeux = async (req: Request, res: Response): Promise<v
   } catch (error) {
     console.error("Erreur lors du deslike :", error);
      res.status(500).json({
-=======
-      return res.status(404).json({ message: "Post non trouvé." });
-    }
-
-    return res.status(200).json({ deslikes: result.rows[0].deslikes });
-  } catch (error) {
-    console.error("Erreur lors du deslike :", error);
-    return res.status(500).json({
->>>>>>> ca90994a0915b49467dbef15190a25b2e21a1f1d
       message: "Erreur interne lors du traitement du like.",
     });
   }
 };
+
+
+
+
+
+
+
 
 
 
