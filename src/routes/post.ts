@@ -14,5 +14,5 @@ router.get('/last/emissions', postController.getLastEmissions) /* last emissions
 router.get('/last/pailladin', postController.getLastLePailladin) /* last le pailladin  */
 router.get('/:id', postController.getPostByID); // Note: Use :id for dynamic ID
 router.post('/:id/like', postController.incrementLike); // Added parameter for post ID
-router.post('/:id/likedeux', postController.incrementLike); // Added parameter for post ID
+router.post('/:id/likedeux', postController.incrementLikeDeux); // Added parameter for post ID
 module.exports = router;
